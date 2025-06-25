@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\LMSWebAppMinimal.Domain\LMSWebAppMinimal.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
