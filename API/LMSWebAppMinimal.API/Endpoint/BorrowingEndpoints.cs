@@ -1,11 +1,12 @@
 using LMSWebAppMinimal.API.DTO;
+using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 
 namespace LMSWebAppMinimal.API.Endpoint;
 
-public static class BorrowingEndpoints
+public class BorrowingEndpoints : IEndpointGroup
 {
-    public static WebApplication MapBorrowingEndpoints(this WebApplication app)
+    public void MapEndpoints(IEndpointRouteBuilder app)
     {
         var borrowing = app.MapGroup("/api/borrowing")
             .WithTags("Book Borrowing")
@@ -52,7 +53,5 @@ public static class BorrowingEndpoints
                 return Results.BadRequest("Could not get borrowed books for user with Id.");
             }
         });
-
-        return app;
     }
 }

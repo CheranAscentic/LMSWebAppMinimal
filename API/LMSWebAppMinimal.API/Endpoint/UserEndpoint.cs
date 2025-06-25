@@ -1,12 +1,13 @@
 ﻿using LMSWebAppMinimal.API.DTO;
+using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using Microsoft.AspNetCore.Builder;
 
 namespace LMSWebAppMinimal.API.Endpoint
 {
-    public static class UserEndpoint
+    public class UserEndpoint : IEndpointGroup
     {
-        public static WebApplication MapUserEndpoints(this WebApplication app)
+        public void MapEndpoints(IEndpointRouteBuilder app)
         {
             var users = app.MapGroup("/api/users")
                 .WithTags("Users")
@@ -72,9 +73,6 @@ namespace LMSWebAppMinimal.API.Endpoint
                     return Results.NotFound("User with Id could not be deleted.");
                 }
             });
-
-
-            return app;
         }
     }
 }

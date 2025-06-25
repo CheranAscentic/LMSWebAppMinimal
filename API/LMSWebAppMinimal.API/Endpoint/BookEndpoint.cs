@@ -1,14 +1,14 @@
 ﻿using LMSWebAppMinimal.API.DTO;
+using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Application.Service;
 
 namespace LMSWebAppMinimal.API.Endpoint
 {
-    public static class BookEndpoint
+    public class BookEndpoint : IEndpointGroup
     {
-        public static WebApplication MapBookEndpoints(this WebApplication app)
+        public void MapEndpoints(IEndpointRouteBuilder app)
         {
-
             //Get All Books
             var books = app.MapGroup("/api/books")
                 .WithTags("Books")
@@ -74,9 +74,6 @@ namespace LMSWebAppMinimal.API.Endpoint
                     return Results.NotFound("Book with Id could not be deleted.");
                 }
             });
-
-
-            return app;
         }
     }
 }

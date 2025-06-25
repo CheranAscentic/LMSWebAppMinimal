@@ -1,4 +1,5 @@
 using LMSWebAppMinimal.API.Endpoint;
+using LMSWebAppMinimal.API.Extension;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Application.Service;
 using LMSWebAppMinimal.Data.Repository;
@@ -19,6 +20,16 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Library Management System API",
         Version = "v1",
         Description = "A .NET 9 Minimal API for Library Management System"
+    });
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
@@ -46,12 +57,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
+
 // Map all endpoints
-app.MapUserEndpoints();
+/*app.MapUserEndpoints();
 app.MapBookEndpoints();
-app.MapBorrowingEndpoints();
+app.MapBorrowingEndpoints();*/
+app.RegisterAllEndpointGroups();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.Run();
 
