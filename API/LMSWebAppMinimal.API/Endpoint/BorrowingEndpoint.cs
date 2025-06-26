@@ -4,7 +4,7 @@ using LMSWebAppMinimal.Application.Interface;
 
 namespace LMSWebAppMinimal.API.Endpoint;
 
-public class BorrowingEndpoints : IEndpointGroup
+public class BorrowingEndpoint : IEndpointGroup
 {
     public void MapEndpoints(IEndpointRouteBuilder app)
     {
