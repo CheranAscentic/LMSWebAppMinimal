@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LMSWebAppMinimal.Application.Interface
 {
-    internal interface ILoginService
+    public interface ILoginService
     {
         BaseUser Login(int userId);
         BaseUser Regsiter(string name, UserType type);

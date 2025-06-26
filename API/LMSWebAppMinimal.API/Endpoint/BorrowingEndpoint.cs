@@ -1,6 +1,8 @@
 using LMSWebAppMinimal.API.DTO;
 using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
+using LMSWebAppMinimal.Domain.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace LMSWebAppMinimal.API.Endpoint;
 
@@ -24,7 +26,12 @@ public class BorrowingEndpoint : IEndpointGroup
             {
                 return Results.BadRequest("Could not borrow Book for user");
             }
-        });
+        })
+        .WithName("BorrowBook")
+        .WithSummary("Borrow a book")
+        .WithDescription("Allows a member to borrow a specific book")
+        .Produces<Book>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
 
         // POST return book
         borrowing.MapPost("/return", (BookBorrowDTO borrowDTO, IBorrowingService borrowingService) =>
@@ -38,7 +45,12 @@ public class BorrowingEndpoint : IEndpointGroup
             {
                 return Results.BadRequest("Could not return book for user.");
             }
-        });
+        })
+        .WithName("ReturnBook")
+        .WithSummary("Return a borrowed book")
+        .WithDescription("Allows a member to return a previously borrowed book")
+        .Produces<Book>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
 
         // GET borrowed books by member ID
         borrowing.MapGet("/member/{memberId}", (int memberId, IBorrowingService borrowingService) =>
@@ -52,6 +64,11 @@ public class BorrowingEndpoint : IEndpointGroup
             {
                 return Results.BadRequest("Could not get borrowed books for user with Id.");
             }
-        });
+        })
+        .WithName("GetBorrowedBooks")
+        .WithSummary("Get borrowed books by member")
+        .WithDescription("Retrieves all books currently borrowed by a specific member")
+        .Produces<List<Book>>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }
