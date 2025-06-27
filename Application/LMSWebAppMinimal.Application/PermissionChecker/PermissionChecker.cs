@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace LMSWebAppMinimal.Application.PermissionChecker
 {
     public class PermissionChecker : IPermissionChecker
-    {
-        // A dictionary of which permissions each UserType may have
+    { 
         private readonly Dictionary<UserType, List<Permission>> userTypePermissions =
             new Dictionary<UserType, List<Permission>>
             {

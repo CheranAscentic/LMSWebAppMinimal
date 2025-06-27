@@ -14,6 +14,8 @@ namespace LMSWebAppMinimal.Domain.Base
         private int? id;
         protected UserType type;
 
+        protected BaseUser() { }
+
         public BaseUser(string name, UserType userType)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));

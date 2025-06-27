@@ -5,7 +5,9 @@ using LMSWebAppMinimal.Application.Service;
 using LMSWebAppMinimal.Data.Repository;
 using LMSWebAppMinimal.Domain.Base;
 using LMSWebAppMinimal.Domain.Model;
+using LMSWebAppMinimal.Data.Context;
 using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -35,13 +37,26 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddOpenApi();
 
-// Register repositories and services
-builder.Services.AddSingleton<IRepository<Book>, InMemoryRepository<Book>>();
-builder.Services.AddSingleton<IRepository<BaseUser>, InMemoryRepository<BaseUser>>();
+// Register the DbContext
+builder.Services.AddDbContext<DataDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddSingleton<IBookService, BookService>();
-builder.Services.AddSingleton<IBorrowingService, BorrowingService>();
+// Replace InMemory repositories with DatabaseRepository
+builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();
+builder.Services.AddScoped<IRepository<BaseUser>, DatabaseRepository<BaseUser>>();
+
+// Register application services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBorrowingService, BorrowingService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+
+builder.Services.AddDbContext<DataDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
@@ -52,22 +67,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "LMS API v1");
-        options.RoutePrefix = string.Empty; // Serves the Swagger UI at the app's root
+        options.RoutePrefix = string.Empty; // Serves Swagger UI at the app's root
     });
     app.MapOpenApi();
 }
 
-
-
 // Map all endpoints
-/*app.MapUserEndpoints();
-app.MapBookEndpoints();
-app.MapBorrowingEndpoints();*/
 app.RegisterAllEndpointGroups();
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowAll");
-
 app.Run();
 

@@ -12,6 +12,11 @@ namespace LMSWebAppMinimal.Domain.Model
     {
         public List<Book> BorrowedBooks { get; set; }
 
+        public Member() : base()
+        {
+            
+        }
+
         public Member(string name) : base(name, UserType.Member)
         {
             this.BorrowedBooks = new List<Book>();

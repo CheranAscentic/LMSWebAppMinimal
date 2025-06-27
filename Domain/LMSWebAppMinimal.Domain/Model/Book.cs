@@ -16,6 +16,10 @@ namespace LMSWebAppMinimal.Domain.Model
         private string category;
         public bool Available { get; set; }
 
+        public Book()
+        {
+        }
+
         public Book(string title, string? author, int? year, string category)
         {
             Title = title;

@@ -10,6 +10,10 @@ namespace LMSWebAppMinimal.Domain.Model
 {
     public class Staff : BaseUser
     {
+        public Staff() : base()
+        {
+            
+        }
         public Staff(string name, UserType type) : base(name, type) { }
 
         public override UserType Type
