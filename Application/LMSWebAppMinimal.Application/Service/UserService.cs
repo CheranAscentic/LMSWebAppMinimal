@@ -8,7 +8,7 @@ namespace LMSWebAppMinimal.Application.Service
 {
     public class UserService : IUserService
     {
-
+         
         private readonly IRepository<BaseUser> userRepository;
 
         public UserService(IRepository<BaseUser> userRepository)

@@ -16,14 +16,13 @@ namespace LMSWebAppMinimal.Data.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
                 
-            // Configure discriminator for TPH inheritance
-            builder.HasDiscriminator(u => u.Type)
-                .HasValue<Member>(UserType.Member)
-                .HasValue<Staff>(UserType.StaffMinor)
-                .HasValue<Staff>(UserType.StaffManagement);
-                
+            // Configure to use Table-Per-Type strategy
+            builder.UseTptMappingStrategy();
+
             // Make BaseUser abstract in the database schema
-            builder.UseTphMappingStrategy();
+            //builder.ToTable("Users", t => t.ExcludeFromMigrations());
+
+            builder.ToTable("Users");
         }
     }
 }

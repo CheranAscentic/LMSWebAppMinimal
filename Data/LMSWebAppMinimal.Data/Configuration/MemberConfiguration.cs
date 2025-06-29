@@ -9,8 +9,8 @@ namespace LMSWebAppMinimal.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Member> builder)
         {
-            // Configure as derived type of BaseUser
-            builder.HasBaseType<BaseUser>();
+            // Configure to use separate table
+            builder.ToTable("Members");
             
             // Configure one-to-many relationship with Books
             builder.HasMany(m => m.BorrowedBooks)

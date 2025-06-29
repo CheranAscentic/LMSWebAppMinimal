@@ -28,7 +28,7 @@ namespace LMSWebAppMinimal.Data.Configuration
             builder.HasOne<Member>()
                 .WithMany(m => m.BorrowedBooks)
                 .HasForeignKey("MemberId")
-                .IsRequired(false) // Book doesn't always have to be borrowed
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
         }
     }
