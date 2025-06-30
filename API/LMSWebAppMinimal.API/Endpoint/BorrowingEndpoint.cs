@@ -3,6 +3,7 @@ using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Domain.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMSWebAppMinimal.API.Endpoint;
 
@@ -15,11 +16,11 @@ public class BorrowingEndpoint : IEndpointGroup
             .WithOpenApi();
 
         // POST borrow book
-        borrowing.MapPost("/borrow", (BookBorrowDTO borrowDTO, IBorrowingService borrowingService) =>
+        borrowing.MapPost("/borrow", ([FromHeader(Name = "X-User-Id")] int authId, BookBorrowDTO borrowDTO, IBorrowingService borrowingService) =>
         {
             try
             {
-                var book = borrowingService.BorrowBook(borrowDTO.BookId, borrowDTO.MemberId);
+                var book = borrowingService.BorrowBook(authId, borrowDTO.BookId, borrowDTO.MemberId);
                 return Results.Ok(book);
             }
             catch (Exception)
@@ -34,11 +35,11 @@ public class BorrowingEndpoint : IEndpointGroup
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         // POST return book
-        borrowing.MapPost("/return", (BookBorrowDTO borrowDTO, IBorrowingService borrowingService) =>
+        borrowing.MapPost("/return", ([FromHeader(Name = "X-User-Id")] int authId, BookBorrowDTO borrowDTO, IBorrowingService borrowingService) =>
         {
             try
             {
-                var book = borrowingService.ReturnBook(borrowDTO.BookId, borrowDTO.MemberId);
+                var book = borrowingService.ReturnBook(authId, borrowDTO.BookId, borrowDTO.MemberId);
                 return Results.Ok(book);
             }
             catch (Exception)
@@ -53,11 +54,11 @@ public class BorrowingEndpoint : IEndpointGroup
         .ProducesProblem(StatusCodes.Status400BadRequest);
 
         // GET borrowed books by member ID
-        borrowing.MapGet("/member/{memberId}", (int memberId, IBorrowingService borrowingService) =>
+        borrowing.MapGet("/member/{memberId}", ([FromHeader(Name = "X-User-Id")] int authId, int memberId, IBorrowingService borrowingService) =>
         {
             try
             {
-                var books = borrowingService.GetBorrowedBooks(memberId);
+                var books = borrowingService.GetBorrowedBooks(authId, memberId);
                 return Results.Ok(books);
             }
             catch (Exception)

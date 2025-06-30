@@ -3,6 +3,7 @@ using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Domain.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMSWebAppMinimal.API.Endpoint
 {
@@ -15,9 +16,14 @@ namespace LMSWebAppMinimal.API.Endpoint
                 .WithTags("Books")
                 .WithOpenApi();
 
-            books.MapGet("/", (IBookService bookService) =>
+            books.MapGet("/", ([FromHeader(Name = "X-User-Id")] int authId, IBookService bookService) =>
             {
-                return Results.Ok(bookService.GetBooks());
+                if (authId <= 0)
+                {
+                    return Results.BadRequest("X-User-Id header must be a valid positive integer");
+                }
+
+                return Results.Ok(bookService.GetBooks(authId));
             })
             .WithName("GetAllBooks")
             .WithSummary("Get all books")
@@ -25,11 +31,16 @@ namespace LMSWebAppMinimal.API.Endpoint
             .Produces<List<Book>>(StatusCodes.Status200OK);
 
             // Get Book with Id
-            books.MapGet("/{id}", (int id, IBookService bookService) =>
+            books.MapGet("/{bookId}", (int bookId, [FromHeader(Name = "X-User-Id")] int authId, IBookService bookService) =>
             {
                 try
                 {
-                    var book = bookService.GetBook(id);
+                    if (authId <= 0)
+                    {
+                        return Results.BadRequest("X-User-Id header must be a valid positive integer");
+                    }
+
+                    var book = bookService.GetBook(authId, bookId);
                     return Results.Ok(book);
                 }
                 catch (Exception e)
@@ -44,11 +55,16 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status404NotFound);
 
             // Create Book with BookDTO
-            books.MapPost("/", (BookDTO bookDTO, IBookService bookService) =>
+            books.MapPost("/", (BookDTO bookDTO, [FromHeader(Name = "X-User-Id")] int authId, IBookService bookService) =>
             {
                 try
                 {
-                    var book = bookService.AddBook(bookDTO.Title, bookDTO.Author, bookDTO.Year, bookDTO.Category);
+                    if (authId <= 0)
+                    {
+                        return Results.BadRequest("X-User-Id header must be a valid positive integer");
+                    }
+
+                    var book = bookService.AddBook(authId, bookDTO.Title, bookDTO.Author, bookDTO.Year, bookDTO.Category);
                     return Results.Created($"/api/books/{book.Id}", book);
                 }
                 catch (Exception e)
@@ -63,11 +79,16 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
             // Update Book with id to BookDTO
-            books.MapPut("/{id}", (int id, BookDTO bookDTO, IBookService bookService) =>
+            books.MapPut("/{bookId}", (int bookId, BookDTO bookDTO, [FromHeader(Name = "X-User-Id")] int authId, IBookService bookService) =>
             {
                 try
                 {
-                    var book = bookService.UpdateBook(id, bookDTO.Title, bookDTO.Author, bookDTO.Year, bookDTO.Category);
+                    if (authId <= 0)
+                    {
+                        return Results.BadRequest("X-User-Id header must be a valid positive integer");
+                    }
+
+                    var book = bookService.UpdateBook(authId, bookId, bookDTO.Title, bookDTO.Author, bookDTO.Year, bookDTO.Category);
                     return Results.Ok(book);
                 }
                 catch (Exception e)
@@ -82,11 +103,16 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status404NotFound);
 
             // Delete Book with Id
-            books.MapDelete("/{id}", (int id, IBookService bookService) =>
+            books.MapDelete("/{bookId}", (int bookId, [FromHeader(Name = "X-User-Id")] int authId, IBookService bookService) =>
             {
                 try
                 {
-                    var book = bookService.RemoveBook(id);
+                    if (authId <= 0)
+                    {
+                        return Results.BadRequest("X-User-Id header must be a valid positive integer");
+                    }
+
+                    var book = bookService.RemoveBook(authId, bookId);
                     return Results.NoContent();
                 }
                 catch (Exception ex)

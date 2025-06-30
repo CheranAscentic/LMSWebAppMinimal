@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using LMSWebAppMinimal.Application.PermissionChecker;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IBorrowingService, BorrowingService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IPermissionChecker, PermissionChecker>();
 
 builder.Services.AddDbContext<DataDBContext>(options =>
 {

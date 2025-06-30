@@ -10,6 +10,7 @@ namespace LMSWebAppMinimal.Domain.Enum
     {
         Member,
         StaffMinor,
-        StaffManagement
+        StaffManagement,
+        None
     }
 }

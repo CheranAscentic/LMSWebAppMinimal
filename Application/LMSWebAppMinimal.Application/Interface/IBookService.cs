@@ -9,11 +9,11 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface IBookService
     {
-        public Book AddBook(string title, string? author, int? year, string category);
-        public Book GetBook(int id);
-        public List<Book> GetBooks();
-        public Book UpdateBook(int id, string title, string? author, int? year, string category);
-        public Book RemoveBook(int id);
+        public Book AddBook(int authId, string title, string? author, int? year, string category);
+        public Book GetBook(int authId, int bookId);
+        public List<Book> GetBooks(int authId);
+        public Book UpdateBook(int authId, int bookId, string title, string? author, int? year, string category);
+        public Book RemoveBook(int authId, int bookId);
 
     }
 }

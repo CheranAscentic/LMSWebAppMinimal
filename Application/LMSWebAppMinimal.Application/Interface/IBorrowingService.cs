@@ -9,8 +9,8 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface IBorrowingService
     {
-        Book BorrowBook(int bookId, int memberId);
-        Book ReturnBook(int bookId, int memberId);
-        List<Book> GetBorrowedBooks(int memberId);
+        Book BorrowBook(int authId, int bookId, int memberId);
+        Book ReturnBook(int authId, int bookId, int memberId);
+        List<Book> GetBorrowedBooks(int authId, int memberId);
     }
 }

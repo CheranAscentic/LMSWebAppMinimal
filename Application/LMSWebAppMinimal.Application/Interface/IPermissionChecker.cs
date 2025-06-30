@@ -9,6 +9,6 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface IPermissionChecker
     {
-        bool HasPermission(UserType userType, Permission permission);
+        void Check(int userId, Permission permission, string errMsg);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Data.Repository;
 using LMSWebAppMinimal.Domain.Model;
+using LMSWebAppMinimal.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,33 +13,37 @@ namespace LMSWebAppMinimal.Application.Service
     public class BookService : IBookService
     {
         private readonly IRepository<Book> bookRepository;
+        private readonly IPermissionChecker permissionChecker;
 
-        public BookService(IRepository<Book> bookRepository)
+        public BookService(IRepository<Book> bookRepository, IPermissionChecker permissionChecker)
         {
             this.bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+            this.permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
         }
-        public Book AddBook(string title, string? author, int? year, string category)
+        public Book AddBook(int authId, string title, string? author, int? year, string category)
         {
+            permissionChecker.Check(authId, Permission.BookAdd, "User does not have permission to add book.");
             Book newBook = new Book(title, author, year, category);
             bookRepository.Add(newBook);
             return newBook;
         }
 
-        public Book GetBook(int id)
+        public Book GetBook(int authId, int bookId)
         {
-            return bookRepository.Get(id) ?? throw new Exception("Book with Title cannot be found");
+            permissionChecker.Check(authId, Permission.BookView, "User does not have permission to view book.");
+            return bookRepository.Get(bookId) ?? throw new Exception("Book with Title cannot be found");
         }
 
-        public List<Book> GetBooks()
+        public List<Book> GetBooks(int authId)
         {
+            permissionChecker.Check(authId, Permission.BookViewAll, "User does not have permission to view all books.");
             return bookRepository.GetAll();
         }
 
-        public Book UpdateBook(int id, string? title, string? author, int? year, string? category)
+        public Book UpdateBook(int authId, int bookId, string? title, string? author, int? year, string? category)
         {
-            /*var book = new Book(title, author, year, category);
-            book.Id = id;*/
-            var book = bookRepository.Get(id) ?? throw new Exception("Book with Title cannot be found");
+            permissionChecker.Check(authId, Permission.BookUpdate, "User does not have permission to update book.");
+            var book = bookRepository.Get(bookId) ?? throw new Exception("Book with Title cannot be found");
 
             book.Title = title ?? book.Title;
             book.Author = author ?? book.Author;
@@ -48,9 +53,10 @@ namespace LMSWebAppMinimal.Application.Service
             return bookRepository.Update(book);
         }
 
-        public Book RemoveBook(int id)
+        public Book RemoveBook(int authId, int bookId)
         {
-            return bookRepository.Remove(id) ?? throw new Exception("Book with Title cannot be found");
+            permissionChecker.Check(authId, Permission.BookDelete, "User does not have permission to delete book.");
+            return bookRepository.Remove(bookId) ?? throw new Exception("Book with Title cannot be found");
         }
     }
 }
