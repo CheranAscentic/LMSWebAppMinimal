@@ -2,10 +2,11 @@ using LMSWebAppMinimal.Data.Context;
 using LMSWebAppMinimal.Domain.Base;
 using LMSWebAppMinimal.Domain.Interface;
 using Microsoft.EntityFrameworkCore;
+using LMSWebAppMinimal.Application.Interface;
 
 namespace LMSWebAppMinimal.Data.Repository
 {
-    public class DatabaseRepository<T> : IRepository<T> where T : class, IEntity
+    public class DatabaseRepository<T> : IRepository<T> where T : class, IEntity // Fix: Added 'class' constraint to ensure T is a reference type
     {
         private readonly DataDBContext _context;
         private readonly DbSet<T> _dbSet;

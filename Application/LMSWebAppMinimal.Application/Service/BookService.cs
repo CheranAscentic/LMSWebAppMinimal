@@ -1,5 +1,4 @@
 ﻿using LMSWebAppMinimal.Application.Interface;
-using LMSWebAppMinimal.Data.Repository;
 using LMSWebAppMinimal.Domain.Model;
 using LMSWebAppMinimal.Domain.Enum;
 using System;

@@ -1,4 +1,5 @@
-﻿using LMSWebAppMinimal.Domain.Interface;
+﻿using LMSWebAppMinimal.Application.Interface;
+using LMSWebAppMinimal.Domain.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LMSWebAppMinimal.Data.Repository
 {
-    public class InMemoryRepository<E> : IRepository<E> where E : IEntity
+    public class InMemoryRepository<E> : IRepository<E> where E : class, IEntity
     {
         private readonly Dictionary<int, E> entities = new Dictionary<int, E>();
         private int nextId = 1;

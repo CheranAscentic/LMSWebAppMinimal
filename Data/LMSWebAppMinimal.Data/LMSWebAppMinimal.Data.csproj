@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\LMSWebAppMinimal.Application\LMSWebAppMinimal.Application.csproj" />
     <ProjectReference Include="..\..\Domain\LMSWebAppMinimal.Domain\LMSWebAppMinimal.Domain.csproj" />
   </ItemGroup>
 

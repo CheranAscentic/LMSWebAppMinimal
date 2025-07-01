@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\LMSWebAppMinimal.Data\LMSWebAppMinimal.Data.csproj" />
     <ProjectReference Include="..\..\Domain\LMSWebAppMinimal.Domain\LMSWebAppMinimal.Domain.csproj" />
   </ItemGroup>
 
