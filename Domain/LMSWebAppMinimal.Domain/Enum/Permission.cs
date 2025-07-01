@@ -8,24 +8,24 @@ namespace LMSWebAppMinimal.Domain.Enum
 {
     public enum Permission
     {
-        BookView,
-        BookViewAll,
-        BookAdd,
-        BookUpdate,
-        BookDelete,
+        BookView,       //View Book
+        BookViewAll,    //View All Books
+        BookAdd,        //Create new Book
+        BookUpdate,     //Update an existing Book
+        BookDelete,     //Delete a Book
 
-        UserView,
-        UserViewAll,
-        UserAdd,
-        UserUpdate,
-        UserDelete,
+        UserView,       //View User details
+        UserViewAll,    //View all Users
+        UserAdd,        //Create new User
+        UserUpdate,     //Update an existing User
+        UserDelete,     //Delete a User
 
-        BorrowBook,
-        BorrowReturn,
-        BorrowViewBorrowedBooks,
+        BorrowBook,     //Borrow a Book
+        BorrowReturn,   //Return a Book
+        BorrowViewBorrowedBooks,    //Viewed Borrowed Books of a User
 
-        None,
-        All
+        None,           //No permissions to do anything
+        All             //Has Permissions to do anything
 
 /*        LoginLogin,
         LoginRegister,*/

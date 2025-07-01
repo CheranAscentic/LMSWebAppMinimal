@@ -10,7 +10,7 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface ILoginService
     {
-        BaseUser Login(int userId);
-        BaseUser Regsiter(string name, UserType type);
+        BaseUser Login(/*int authId, */int userId);
+        BaseUser Regsiter(/*int authId, */string name, UserType type);
     }
 }

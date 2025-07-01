@@ -14,19 +14,24 @@ namespace LMSWebAppMinimal.Application.Service
     public class LoginService : ILoginService
     {
         private readonly IRepository<BaseUser> userRepository;
+        private readonly IPermissionChecker permissionChecker;
 
-        public LoginService(IRepository<BaseUser> userRepository)
+        public LoginService(IRepository<BaseUser> userRepository, IPermissionChecker permissionChecker)
         {
             this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this.permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
         }
 
-        public BaseUser Login(int userId)
+        public BaseUser Login(/*int authId, */int userId)
         {
+            // No permission check for user login
+            //permissionChecker.Check(authId, Permission.Loginlogin, "User does not have permission to login.");
             return userRepository.Get(userId) ?? throw new Exception("User with ID cannot be found to login");
         }
 
-        public BaseUser Regsiter(string name, UserType type)
+        public BaseUser Regsiter(/*int authId,*/string name, UserType type)
         {
+            // No Permission check for user registration
             BaseUser newUser;
 
             switch (type)

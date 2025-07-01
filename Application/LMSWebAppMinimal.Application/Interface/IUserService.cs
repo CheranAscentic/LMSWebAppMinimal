@@ -10,10 +10,10 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface IUserService
     {
-        public BaseUser AddUser(string name, UserType type);
-        public BaseUser RemoveUser(int id);
-        public BaseUser GetUser(int id);
-        public BaseUser UpdateUser(int id, String? name, UserType? type);
-        public List<BaseUser> GetAllUsers();
+        public BaseUser AddUser(int authid, string name, UserType type);
+        public BaseUser RemoveUser(int authid, int userId);
+        public BaseUser GetUser(int authid, int userid);
+        public BaseUser UpdateUser(int authid, int userid, String? name, UserType? type);
+        public List<BaseUser> GetAllUsers(int authid);
     }
 }

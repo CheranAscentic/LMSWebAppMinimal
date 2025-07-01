@@ -3,6 +3,7 @@ using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Domain.Base;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMSWebAppMinimal.API.Endpoint
 {
@@ -15,8 +16,8 @@ namespace LMSWebAppMinimal.API.Endpoint
                 .WithOpenApi();
 
             // Get all users
-            users.MapGet("/", (IUserService userService) => {
-                return Results.Ok(userService.GetAllUsers());
+            users.MapGet("/", ([FromHeader(Name = "X-User-Id")] int authId, IUserService userService) => {
+                return Results.Ok(userService.GetAllUsers(authId));
             })
             .WithName("GetAllUsers")
             .WithSummary("Get all users")
@@ -24,11 +25,11 @@ namespace LMSWebAppMinimal.API.Endpoint
             .Produces<List<BaseUser>>(StatusCodes.Status200OK);
 
             // Get User with Id
-            users.MapGet("/{id}", (int id, IUserService userService) =>
+            users.MapGet("/{userId}", ([FromHeader(Name = "X-User-Id")] int authId, int userId, IUserService userService) =>
             {
                 try
                 {
-                    var user = userService.GetUser(id);
+                    var user = userService.GetUser(authId, userId);
                     return Results.Ok(user);
                 }
                 catch (Exception ex)
@@ -43,11 +44,11 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status404NotFound);
 
             // Add user with CreateUserDTO
-            users.MapPost("/", (CreateUserDTO createUserDTO, IUserService userService) =>
+            users.MapPost("/", ([FromHeader(Name = "X-User-Id")] int authId, CreateUserDTO createUserDTO, IUserService userService) =>
             {
                 try
                 {
-                    var user = userService.AddUser(createUserDTO.Name, createUserDTO.Type);
+                    var user = userService.AddUser(authId, createUserDTO.Name, createUserDTO.Type);
                     return Results.Created($"/api/users/{user.Id}", user);
                 }
                 catch (Exception ex)
@@ -62,11 +63,11 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
             // Update user with Id to User
-            users.MapPut("/{id}", (int id, UserDTO userDTO, IUserService userService) =>
+            users.MapPut("/{userId}", ([FromHeader(Name = "X-User-Id")] int authId, int userId, UserDTO userDTO, IUserService userService) =>
             {
                 try
                 {
-                    var updatedUser = userService.UpdateUser(id, userDTO.Name, userDTO.Type);
+                    var updatedUser = userService.UpdateUser(authId, userId, userDTO.Name, userDTO.Type);
                     return Results.Ok(updatedUser);
                 }
                 catch (Exception ex)
@@ -81,11 +82,11 @@ namespace LMSWebAppMinimal.API.Endpoint
             .ProducesProblem(StatusCodes.Status404NotFound);
 
             // Delete user with Id
-            users.MapDelete("/{id}", (int id, IUserService userService) =>
+            users.MapDelete("/{userId}", ([FromHeader(Name = "X-User-Id")] int authId, int userId, IUserService userService) =>
             {
                 try
                 {
-                    var user = userService.RemoveUser(id);
+                    var user = userService.RemoveUser(authId, userId);
                     return Results.NoContent();
                 }
                 catch (Exception ex)
