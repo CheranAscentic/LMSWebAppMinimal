@@ -80,7 +80,7 @@ namespace LMSWebAppMinimal.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("LMSWebAppMinimal.Domain.Model.Member", b =>

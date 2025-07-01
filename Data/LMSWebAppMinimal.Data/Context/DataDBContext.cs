@@ -21,12 +21,15 @@ namespace LMSWebAppMinimal.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             // Apply configuration classes
-            modelBuilder.ApplyConfiguration(new BookConfiguration());
+            /*modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new BaseUserConfiguration());
             modelBuilder.ApplyConfiguration(new StaffConfiguration());
-            modelBuilder.ApplyConfiguration(new MemberConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberConfiguration());*/
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataDBContext).Assembly);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
