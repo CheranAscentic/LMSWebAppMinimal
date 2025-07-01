@@ -1,59 +1,50 @@
+using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Data.Context;
-using LMSWebAppMinimal.Domain.Base;
 using LMSWebAppMinimal.Domain.Interface;
 using Microsoft.EntityFrameworkCore;
-using LMSWebAppMinimal.Application.Interface;
 
 namespace LMSWebAppMinimal.Data.Repository
 {
-    public class DatabaseRepository<T> : IRepository<T> where T : class, IEntity // Fix: Added 'class' constraint to ensure T is a reference type
+    public class DatabaseRepository<T> : IRepository<T> where T : class, IEntity
     {
-        private readonly DataDBContext _context;
-        private readonly DbSet<T> _dbSet;
+        private readonly DataDBContext context;
+        private readonly DbSet<T> dbSet;
 
         public DatabaseRepository(DataDBContext dbContext)
         {
-            _context = dbContext;
-            _dbSet = _context.Set<T>();
+            context = dbContext;
+            dbSet = context.Set<T>();
         }
 
-        // Adds new entity and returns the same entity after persistence
         public T Add(T entity)
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
+            dbSet.Add(entity);
             return entity;
         }
 
-        // Retrieves a single entity by id
         public T Get(int id)
         {
-            return _dbSet.Find(id);
+            return dbSet.Find(id);
         }
 
-        // Retrieves all entities
         public List<T> GetAll()
         {
-            return _dbSet.ToList();
+            return dbSet.ToList();
         }
 
-        // Removes an entity by id and returns the removed entity
         public T Remove(int id)
         {
-            var found = _dbSet.Find(id);
+            var found = dbSet.Find(id);
             if (found == null)
-                return null; // or throw an exception if preferred
+                return null;
 
-            _dbSet.Remove(found);
-            _context.SaveChanges();
+            dbSet.Remove(found);
             return found;
         }
 
-        // Updates an existing entity and returns the updated entity
         public T Update(T entity)
         {
-            _dbSet.Update(entity);
-            _context.SaveChanges();
+            dbSet.Update(entity);
             return entity;
         }
     }

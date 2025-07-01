@@ -6,9 +6,8 @@ using LMSWebAppMinimal.Data.Repository;
 using LMSWebAppMinimal.Domain.Base;
 using LMSWebAppMinimal.Domain.Model;
 using LMSWebAppMinimal.Data.Context;
-using Microsoft.AspNetCore.OpenApi;
+using LMSWebAppMinimal.Data.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using LMSWebAppMinimal.Application.PermissionChecker;
 
@@ -44,9 +43,12 @@ builder.Services.AddDbContext<DataDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Replace InMemory repositories with DatabaseRepository
-builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();
+// Register UnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Register repositories required by services
 builder.Services.AddScoped<IRepository<BaseUser>, DatabaseRepository<BaseUser>>();
+builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();
 
 // Register application services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -55,10 +57,9 @@ builder.Services.AddScoped<IBorrowingService, BorrowingService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IPermissionChecker, PermissionChecker>();
 
-builder.Services.AddDbContext<DataDBContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+/*// Register repository services
+builder.Services.AddScoped<IRepository<BaseUser>, DatabaseRepository<BaseUser>>();
+builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();*/
 
 var app = builder.Build();
 

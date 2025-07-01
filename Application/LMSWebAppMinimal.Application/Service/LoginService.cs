@@ -12,12 +12,12 @@ namespace LMSWebAppMinimal.Application.Service
 {
     public class LoginService : ILoginService
     {
-        private readonly IRepository<BaseUser> userRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IPermissionChecker permissionChecker;
 
-        public LoginService(IRepository<BaseUser> userRepository, IPermissionChecker permissionChecker)
+        public LoginService(IUnitOfWork unitOfWork, IPermissionChecker permissionChecker)
         {
-            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
         }
 
@@ -25,7 +25,7 @@ namespace LMSWebAppMinimal.Application.Service
         {
             // No permission check for user login
             //permissionChecker.Check(authId, Permission.Loginlogin, "User does not have permission to login.");
-            return userRepository.Get(userId) ?? throw new Exception("User with ID cannot be found to login");
+            return unitOfWork.Users.Get(userId) ?? throw new Exception("User with ID cannot be found to login");
         }
 
         public BaseUser Regsiter(/*int authId,*/string name, UserType type)
@@ -48,7 +48,9 @@ namespace LMSWebAppMinimal.Application.Service
                     throw new ArgumentException("Invalid user type");
             }
 
-            return userRepository.Add(newUser);
+            var result = unitOfWork.Users.Add(newUser);
+            unitOfWork.SaveChanges();
+            return result;
         }
     }
 }

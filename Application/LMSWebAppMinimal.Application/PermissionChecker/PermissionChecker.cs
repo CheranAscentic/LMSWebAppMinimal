@@ -12,11 +12,13 @@ namespace LMSWebAppMinimal.Application.PermissionChecker
     public class PermissionChecker : IPermissionChecker
     {
         private readonly Dictionary<UserType, List<Permission>> userTypePermissions;
-        IRepository<BaseUser> userRepository;
+        //IRepository<BaseUser> userRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public PermissionChecker(IRepository<BaseUser> userRepository)
+        public PermissionChecker(IRepository<BaseUser> userRepository, IUnitOfWork unitOfWork)
         {
-            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            //this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.userTypePermissions = new Dictionary<UserType, List<Permission>>
             {
                 {
@@ -78,7 +80,8 @@ namespace LMSWebAppMinimal.Application.PermissionChecker
             List<Permission> perms;
             try
             {
-                var user = userRepository.Get(userId);
+                //var user = userRepository.Get(userId);
+                var user = unitOfWork.Users.Get(userId);
                 perms = userTypePermissions[user.Type];
             }
             catch (Exception ex) 
