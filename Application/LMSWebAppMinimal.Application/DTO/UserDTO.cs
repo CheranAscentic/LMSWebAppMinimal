@@ -1,6 +1,6 @@
 ﻿using LMSWebAppMinimal.Domain.Enum;
 
-namespace LMSWebAppMinimal.API.DTO
+namespace LMSWebAppMinimal.Application.DTO
 {
     public class UserDTO
     {
@@ -10,7 +10,7 @@ namespace LMSWebAppMinimal.API.DTO
         public UserType Type {
             get { return this.type; }
             set {
-                UserType[] validTypes = { UserType.StaffMinor, UserType.StaffManagement };
+                UserType[] validTypes = { UserType.Member, UserType.StaffMinor, UserType.StaffManagement };
 
                 if (value == null || !validTypes.Contains(value))
                 {

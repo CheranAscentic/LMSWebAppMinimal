@@ -1,4 +1,4 @@
-namespace LMSWebAppMinimal.API.DTO
+namespace LMSWebAppMinimal.Application.DTO
 {
     public class LoginDTO
     {

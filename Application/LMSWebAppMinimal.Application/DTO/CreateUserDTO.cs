@@ -1,6 +1,6 @@
 ﻿using LMSWebAppMinimal.Domain.Enum;
 
-namespace LMSWebAppMinimal.API.DTO
+namespace LMSWebAppMinimal.Application.DTO
 {
     public class CreateUserDTO
     {

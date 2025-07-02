@@ -11,20 +11,16 @@ namespace LMSWebAppMinimal.Data.UnitOfWork
     {
         private readonly DataDBContext context;
         private IDbContextTransaction? transaction;
-        
-        private IRepository<Book>? books;
-        private IRepository<BaseUser>? users;
 
-        public UnitOfWork(DataDBContext context)
+        /*public IRepository<Book> Books { get; }
+        public IRepository<BaseUser> Users { get; }*/
+
+        public UnitOfWork(DataDBContext context/*, IRepository<Book> books, IRepository<BaseUser> users*/)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
+            /*this.Books = books ?? throw new ArgumentNullException(nameof(books));
+            this.Users = users ?? throw new ArgumentNullException(nameof(users));*/
         }
-
-        public IRepository<Book> Books =>
-            books ??= new DatabaseRepository<Book>(context);
-
-        public IRepository<BaseUser> Users =>
-            users ??= new DatabaseRepository<BaseUser>(context);
 
         public async Task<int> SaveChangesAsync()
         {

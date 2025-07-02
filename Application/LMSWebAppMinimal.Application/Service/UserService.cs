@@ -9,11 +9,13 @@ namespace LMSWebAppMinimal.Application.Service
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IPermissionChecker permissionChecker;
+        private readonly IRepository<BaseUser> userRepository;
 
-        public UserService(IUnitOfWork unitOfWork, IPermissionChecker permissionChecker)
+        public UserService(IUnitOfWork unitOfWork, IPermissionChecker permissionChecker, IRepository<BaseUser> userRepositories)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepositories));
         }
 
         public BaseUser AddUser(int authId, string name, UserType type)
@@ -36,7 +38,7 @@ namespace LMSWebAppMinimal.Application.Service
                     throw new ArgumentException("Invalid user type");
             }
 
-            var result = unitOfWork.Users.Add(newUser);
+            var result = userRepository.Add(newUser);
             unitOfWork.SaveChanges();
             return result;
         }
@@ -44,22 +46,22 @@ namespace LMSWebAppMinimal.Application.Service
         public List<BaseUser> GetAllUsers(int authId)
         {
             permissionChecker.Check(authId, Permission.UserViewAll, "User does not have permission to view all users.");
-            return unitOfWork.Users.GetAll();
+            return userRepository.GetAll();
         }
 
         public BaseUser GetUser(int authId, int userId)
         {
             permissionChecker.Check(authId, Permission.UserView, "User does not have permission to view user.");
-            return unitOfWork.Users.Get(userId) ?? throw new Exception("User with Title cannot be found");
+            return userRepository.Get(userId) ?? throw new Exception("User with Title cannot be found");
         }
 
         public BaseUser UpdateUser(int authId, int userId, String? name, UserType? type)
         {
             permissionChecker.Check(authId, Permission.UserUpdate, "User does not have permission to update user.");
-            BaseUser user = unitOfWork.Users.Get(userId) ?? throw new Exception("User with Id cannot be found");
+            BaseUser user = userRepository.Get(userId) ?? throw new Exception("User with Id cannot be found");
             user.Name = name ?? user.Name;
             user.Type = type ?? user.Type;
-            var result = unitOfWork.Users.Update(user);
+            var result = userRepository.Update(user);
             unitOfWork.SaveChanges();
             return result;
         }
@@ -67,7 +69,7 @@ namespace LMSWebAppMinimal.Application.Service
         public BaseUser RemoveUser(int authId, int userId)
         {
             permissionChecker.Check(authId, Permission.UserDelete, "User does not have permission to delete user.");
-            var result = unitOfWork.Users.Remove(userId) ?? throw new Exception("User with Id cannot be found");
+            var result = userRepository.Remove(userId) ?? throw new Exception("User with Id cannot be found");
             unitOfWork.SaveChanges();
             return result;
         }

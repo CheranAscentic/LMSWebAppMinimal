@@ -1,4 +1,4 @@
-using LMSWebAppMinimal.API.DTO;
+using LMSWebAppMinimal.Application.DTO;
 using LMSWebAppMinimal.API.Interface;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Domain.Model;

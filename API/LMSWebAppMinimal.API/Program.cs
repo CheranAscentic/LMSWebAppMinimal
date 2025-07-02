@@ -1,4 +1,3 @@
-using LMSWebAppMinimal.API.Endpoint;
 using LMSWebAppMinimal.API.Extension;
 using LMSWebAppMinimal.Application.Interface;
 using LMSWebAppMinimal.Application.Service;
@@ -57,9 +56,9 @@ builder.Services.AddScoped<IBorrowingService, BorrowingService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IPermissionChecker, PermissionChecker>();
 
-/*// Register repository services
+// Register repository services
 builder.Services.AddScoped<IRepository<BaseUser>, DatabaseRepository<BaseUser>>();
-builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();*/
+builder.Services.AddScoped<IRepository<Book>, DatabaseRepository<Book>>();
 
 var app = builder.Build();
 

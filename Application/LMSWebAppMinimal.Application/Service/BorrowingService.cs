@@ -14,32 +14,36 @@ namespace LMSWebAppMinimal.Application.Service
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IPermissionChecker permissionChecker;
+        private readonly IRepository<BaseUser> userRepository;
+        private readonly IRepository<Book> bookRepository;
 
-        public BorrowingService(IUnitOfWork unitOfWork, IPermissionChecker permissionChecker)
+        public BorrowingService(IUnitOfWork unitOfWork, IPermissionChecker permissionChecker, IRepository<BaseUser> userRepository, IRepository<Book> bookRepository)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             this.permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
+            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            this.bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
         }
 
         public Book BorrowBook(int authId, int bookId, int memberId)
         {
             permissionChecker.Check(authId, Permission.BorrowBook, "You do not have permission to borrow books");
 
-            var book = unitOfWork.Books.Get(bookId) ?? throw new Exception("Book not found");
+            var book = bookRepository.Get(bookId) ?? throw new Exception("Book not found");
 
             if (!book.Available)
                 throw new Exception("Book is not available for borrowing");
 
-            var user = unitOfWork.Users.Get(memberId);
+            var user = userRepository.Get(memberId);
 
             if (user == null || !(user is Member member))
                 throw new Exception("Only members can borrow books");
 
             book.Available = false;
-            unitOfWork.Books.Update(book);
+            bookRepository.Update(book);
 
             member.BorrowedBooks.Add(book);
-            unitOfWork.Users.Update(member);
+            userRepository.Update(member);
 
             unitOfWork.SaveChanges();
 
@@ -49,7 +53,7 @@ namespace LMSWebAppMinimal.Application.Service
         public List<Book> GetBorrowedBooks(int authId, int memberId)
         {
             permissionChecker.Check(authId, Permission.BorrowViewBorrowedBooks, "You do not have permission to view borrowed books");
-            var user = unitOfWork.Users.Get(memberId);
+            var user = userRepository.Get(memberId);
 
             if (user == null || !(user is Member member))
                 throw new Exception("Member not found");
@@ -61,9 +65,9 @@ namespace LMSWebAppMinimal.Application.Service
         {
             permissionChecker.Check(authId, Permission.BorrowReturn, "You do not have permission to return books");
 
-            var book = unitOfWork.Books.Get(bookId) ?? throw new Exception("Book not found");
+            var book = bookRepository.Get(bookId) ?? throw new Exception("Book not found");
 
-            var user = unitOfWork.Users.Get(memberId);
+            var user = userRepository.Get(memberId);
 
             if (user == null || !(user is Member member))
                 throw new Exception("Only members can return books");
@@ -72,10 +76,10 @@ namespace LMSWebAppMinimal.Application.Service
                 throw new Exception("Member has not borrowed this book");
 
             book.Available = true;
-            unitOfWork.Books.Update(book);
+            bookRepository.Update(book);
 
             member.BorrowedBooks.RemoveAll(b => b.Id == bookId);
-            unitOfWork.Users.Update(member);
+            userRepository.Update(member);
 
             unitOfWork.SaveChanges();
 

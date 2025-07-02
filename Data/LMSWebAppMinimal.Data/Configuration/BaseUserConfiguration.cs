@@ -15,12 +15,8 @@ namespace LMSWebAppMinimal.Data.Configuration
             builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(100);
-                
-            // Configure to use Table-Per-Type strategy
+            
             builder.UseTptMappingStrategy();
-
-            // Make BaseUser abstract in the database schema
-            //builder.ToTable("Users", t => t.ExcludeFromMigrations());
 
             builder.ToTable("Users");
         }

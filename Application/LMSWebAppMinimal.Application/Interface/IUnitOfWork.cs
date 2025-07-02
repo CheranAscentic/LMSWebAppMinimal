@@ -5,8 +5,8 @@ namespace LMSWebAppMinimal.Application.Interface
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Book> Books { get; }
-        IRepository<BaseUser> Users { get; }
+        /*IRepository<Book> Books { get; }
+        IRepository<BaseUser> Users { get; }*/
         
         Task<int> SaveChangesAsync();
         int SaveChanges();
